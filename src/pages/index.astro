@@ -1,5 +1,50 @@
 ---
+import CharacterCard from "../components/CharacterCard.astro";
 import Layout from "../layouts/Layout.astro";
+import type { PaginatedResponse } from "../types/swapi/paginated";
+import type { People } from "../types/swapi/people";
+
+const pagination = Astro.url.searchParams.get("page") || "";
+const data = await fetch(
+  `${import.meta.env.API_URL}/people/${pagination ? `?page=${pagination}` : ""}`
+).then((res) => res.json() as Promise<PaginatedResponse<People>>);
+
+const parsedResults = data.results.map((result) => {
+  return {
+    ...result,
+    url: result.url.split("/api/").at(-1),
+    id: result.url.split("/people").at(-1)?.replaceAll("/", ""),
+  };
+});
+
+const parsedData = {
+  count: data.count,
+  next: data.next
+    ? `/?page=${new URL(data.next).searchParams.get("page")}`
+    : null,
+  previous: data.previous
+    ? `/?page=${new URL(data.previous).searchParams.get("page")}`
+    : null,
+  results: parsedResults,
+} as PaginatedResponse<People & { id: string }>;
 ---
 
-<Layout title="Welcome to Astro." />
+<Layout title="Star Wars Characters">
+  <ul class="grid grid-cols-6 gap-8 md:grid-cols-12">
+    {
+      parsedData.results.map((character) => {
+        return (
+          <li class="col-span-3">
+            <a href={character.url}>
+              <CharacterCard character={character} />
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+  <div>
+    <a href={parsedData.previous}> Previous</a>
+    <a href={parsedData.next}> Next</a>
+  </div>
+</Layout>

@@ -1,0 +1,24 @@
+---
+/**
+ * A card that recieves a People & {id:string} object as a parameter and displays details + image
+ */
+
+import type { People } from "../types/swapi/people";
+
+export interface Props {
+  character: People & { id: string };
+}
+
+const { character } = Astro.props;
+---
+
+<div
+  class="flex flex-col items-center gap-2 rounded-lg border-2 border-zinc-600 bg-zinc-100 bg-opacity-10 p-2 backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-zinc-400 hover:bg-opacity-20"
+>
+  <img
+    src={`${import.meta.env.CHARACTER_IMAGES_URL}/${character.id}.jpg`}
+    class="rounded-md font-medium"
+    alt={character.name}
+  />
+  <h3 class="text-center">{character.name}</h3>
+</div>
