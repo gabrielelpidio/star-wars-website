@@ -11,6 +11,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^1.6.10"
+    "@astrojs/react": "^1.2.2",
+    "@astrojs/tailwind": "^2.1.2",
+    "@astrojs/vercel": "^2.3.4",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
+    "astro": "^1.6.10",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.2.4"
   }
 }
