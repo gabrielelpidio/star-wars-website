@@ -15,7 +15,39 @@ const { title } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body>
+  <body
+    class="mx-4 max-w-screen-2xl space-y-2 bg-zinc-900 text-slate-100 2xl:mx-auto"
+  >
+    <header
+      class="sticky top-0 z-10 flex items-center justify-between bg-zinc-900 bg-gradient-to-tr py-4"
+    >
+      <a
+        href="/"
+        class="bg-gradient-to-tr from-yellow-700 to-yellow-300 bg-clip-text text-2xl font-bold"
+        style="-webkit-text-fill-color: transparent;">Star Wars Characters</a
+      >
+
+      <label for="search-input" class="sr-only"></label>
+      <input
+        id="search-input"
+        type="text"
+        class="rounded-full bg-zinc-800 py-1 px-4 outline outline-2 outline-yellow-600 placeholder:text-zinc-600 focus-visible:outline-2 focus-visible:outline-yellow-400"
+        placeholder="Search a character"
+      />
+    </header>
     <slot />
   </body>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+  <style is:global>
+    body {
+      font-family: "Kanit", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+        "Helvetica Neue", sans-serif;
+    }
+  </style>
 </html>
