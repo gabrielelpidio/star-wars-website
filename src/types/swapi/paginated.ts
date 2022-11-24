@@ -1,5 +1,5 @@
 export type PaginatedResponse<T> = {
-  count: string;
+  count: number;
   next: string | null;
   previous: string | null;
   results: T[];
