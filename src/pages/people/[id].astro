@@ -1,0 +1,58 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import type { People } from "../../types/swapi/people";
+import { sentenceCase } from "change-case";
+
+const { id } = Astro.params;
+
+const character = await fetch(`${import.meta.env.API_URL}/people/${id}`).then(
+  (res) => res.json() as Promise<People>
+);
+
+const CHARACTER_PROPERTIES = [
+  { name: "birth_year", format: "" },
+  { name: "eye_color", format: "" },
+  { name: "gender", format: "" },
+  { name: "hair_color", format: "" },
+  { name: "height", format: "cm" },
+  { name: "mass", format: "kg" },
+  { name: "skin_color", format: "" },
+] as const;
+---
+
+<Layout title={character.name}>
+  <div class="grid h-full w-full grid-cols-6 gap-4 md:grid-cols-12">
+    <picture
+      class="col-span-6 max-h-screen rounded-lg border-2 border-zinc-700 bg-zinc-800 p-2 md:col-span-4"
+    >
+      <img
+        src={`${import.meta.env.CHARACTER_IMAGES_URL}/${id}.jpg`}
+        alt={character.name}
+        class="h-full w-full rounded-md object-cover shadow-md shadow-zinc-600"
+      />
+    </picture>
+    <div
+      class="col-span-full flex max-h-max flex-col rounded-lg border-2 border-zinc-700 bg-zinc-800 p-4 md:col-span-8"
+    >
+      <h1
+        class="mb-4 w-max bg-gradient-to-r from-yellow-700 to-yellow-300 bg-clip-text text-4xl font-bold text-transparent"
+      >
+        {character.name}
+      </h1>
+      {
+        CHARACTER_PROPERTIES.map((property) => {
+          return (
+            <p class="text-2xl text-zinc-200">
+              <span class="inline-block font-medium">
+                {sentenceCase(property.name) + ": "}
+              </span>
+              <span class="capitalize">
+                {character[property.name] + property.format}
+              </span>
+            </p>
+          );
+        })
+      }
+    </div>
+  </div>
+</Layout>
