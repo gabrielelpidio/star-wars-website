@@ -4,11 +4,15 @@ import Layout from "../layouts/Layout.astro";
 import type { PaginatedResponse } from "../types/swapi/paginated";
 import type { People } from "../types/swapi/people";
 
+const PAGE_SIZE = 10;
+
 const pagination = Astro.url.searchParams.get("page") || "";
+const paginationInt = pagination ? parseInt(pagination) : 0;
 const data = await fetch(
   `${import.meta.env.API_URL}/people/${pagination ? `?page=${pagination}` : ""}`
 ).then((res) => res.json() as Promise<PaginatedResponse<People>>);
 
+const lastPage = Math.ceil(parseInt(data.count) / PAGE_SIZE);
 const parsedResults = data.results.map((result) => {
   return {
     ...result,
@@ -16,6 +20,9 @@ const parsedResults = data.results.map((result) => {
     id: result.url.split("/people").at(-1)?.replaceAll("/", ""),
   };
 });
+
+const pageFirstItem = paginationInt ? (paginationInt - 1) * PAGE_SIZE + 1 : 1;
+const pageLastItem = paginationInt ? paginationInt * PAGE_SIZE : PAGE_SIZE;
 
 const parsedData = {
   count: data.count,
@@ -43,8 +50,56 @@ const parsedData = {
       })
     }
   </ul>
-  <div>
-    <a href={parsedData.previous}> Previous</a>
-    <a href={parsedData.next}> Next</a>
-  </div>
+  <nav
+    class="flex items-center justify-between rounded-lg border-2 border-zinc-700 bg-zinc-800 px-4 py-3 sm:px-6"
+    aria-label="Pagination"
+  >
+    <div class="hidden sm:block">
+      <p class="text-sm">
+        Showing
+        <!-- Multiplies pagination -->
+        <span class="font-medium">{pageFirstItem}</span>
+        to
+        <span class="font-medium"
+          >{paginationInt === lastPage ? parsedData.count : pageLastItem}</span
+        >
+        of
+        <span class="font-medium">{parsedData.count}</span>
+        results
+      </p>
+    </div>
+    <div class="flex flex-1 justify-between sm:justify-end">
+      {
+        [
+          {
+            href: "/",
+            "aria-disabled": !Boolean(parsedData.previous),
+            label: "First",
+          },
+          {
+            href: parsedData.previous,
+            "aria-disabled": !Boolean(parsedData.previous),
+            label: "Previous",
+          },
+          {
+            href: parsedData.next,
+            "aria-disabled": !Boolean(parsedData.next),
+            label: "Next",
+          },
+          {
+            href: parsedData.next,
+            "aria-disabled": !Boolean(parsedData.next),
+            label: "Next",
+          },
+        ].map(({ label, ...item }) => (
+          <a
+            {...item}
+            class="relative ml-3 inline-flex items-center rounded-md border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium transition-all hover:border-zinc-600 hover:bg-zinc-600 aria-disabled:pointer-events-none aria-disabled:border-zinc-700 aria-disabled:bg-zinc-800"
+          >
+            {label}
+          </a>
+        ))
+      }
+    </div>
+  </nav>
 </Layout>
