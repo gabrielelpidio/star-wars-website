@@ -1,0 +1,22 @@
+---
+/**
+ * It renders an anchor meant to be used in NavigationBar, it recieves disabled
+ * and href as props and it allows anything to be passed as a children of the
+ * component
+ */
+
+interface Props {
+  disabled?: boolean;
+  href?: string | null;
+}
+
+const { disabled, href } = Astro.props;
+---
+
+<a
+  aria-disabled={disabled}
+  href={href}
+  class="relative inline-flex items-center rounded-md border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium transition-all hover:border-zinc-600 hover:bg-zinc-600 aria-disabled:pointer-events-none aria-disabled:border-zinc-700 aria-disabled:bg-zinc-800"
+>
+  <slot />
+</a>

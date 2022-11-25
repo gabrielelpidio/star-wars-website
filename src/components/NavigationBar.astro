@@ -1,0 +1,37 @@
+---
+/**
+ * It renders a Bar with a posibility to pass anything
+ * as a children and text with indicators of the navigation
+ */
+interface Props {
+  /** number of the first item on the page */
+  pageStart: number;
+  /** number of the last item on the page */
+  pageEnd: number;
+  /** number of the total amount of items on the page */
+  pageTotal: number;
+}
+
+const { pageStart, pageEnd, pageTotal } = Astro.props;
+---
+
+<nav
+  class="mt-8 flex items-center rounded-lg border-2 border-zinc-700 bg-zinc-800 py-3 sm:justify-between sm:px-6"
+  aria-label="Pagination"
+>
+  <div class="hidden sm:block">
+    <p class="text-sm">
+      Showing
+      <!-- Multiplies pagination -->
+      <span class="font-medium">{pageStart}</span>
+      to
+      <span class="font-medium">{pageEnd}</span>
+      of
+      <span class="font-medium">{pageTotal}</span>
+      results
+    </p>
+  </div>
+  <div class="flex flex-1 justify-evenly gap-2 sm:justify-end">
+    <slot />
+  </div>
+</nav>
