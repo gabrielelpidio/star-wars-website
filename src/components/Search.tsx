@@ -69,28 +69,31 @@ export function ComboBox() {
       <ul
         {...getMenuProps()}
         className={clsx(
-          "absolute right-0 left-0 mt-2 max-h-80 overflow-y-auto rounded-lg  border border-zinc-700 bg-zinc-800 shadow-md empty:border-none",
-          isOpen && ""
+          "absolute right-0 left-0 mt-2 max-h-80 overflow-y-auto rounded-lg  border border-zinc-700 bg-zinc-800 shadow-md empty:border-none"
         )}
       >
-        {isValidating && !data && (
-          <li className="pointer-events-none p-2">Searching...</li>
+        {isOpen && (
+          <>
+            {isValidating && !data && (
+              <li className="pointer-events-none p-2">Searching...</li>
+            )}
+            {data?.results?.map((item, index) => {
+              return (
+                <li key={`${item.url}`} {...getItemProps({ item, index })}>
+                  <a
+                    href={item.url}
+                    className={clsx(
+                      highlightedIndex === index && "bg-zinc-600",
+                      "block cursor-pointer p-2"
+                    )}
+                  >
+                    <span>{item.name}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </>
         )}
-        {data?.results?.map((item, index) => {
-          return (
-            <li key={`${item.url}`} {...getItemProps({ item, index })}>
-              <a
-                href={item.url}
-                className={clsx(
-                  highlightedIndex === index && "bg-zinc-600",
-                  "block cursor-pointer p-2"
-                )}
-              >
-                <span>{item.name}</span>
-              </a>
-            </li>
-          );
-        })}
       </ul>
     </div>
   );
