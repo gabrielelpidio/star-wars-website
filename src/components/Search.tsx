@@ -27,7 +27,11 @@ const API_URL = BASE_URL && new URL("/api/people", BASE_URL);
 const fetcher = (...args: [RequestInfo, RequestInit]) =>
   fetch(...args).then((res) => res.json());
 
-export function ComboBox() {
+/**
+ *
+ * Search
+ */
+export function Search() {
   const [searchTerm, setSearchTerm] = React.useState<string>();
   const { data, isValidating } = useSWR<
     PaginatedResponse<People & { id: string }>
